@@ -11,7 +11,7 @@
 #include <vector>
 #include <algorithm>
 #include <atomic>
-#include <mutex>
+#include <atomic>
 #include <cmath>
 #include <stdint.h>
 #include <limits>
@@ -35,6 +35,7 @@ typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, boost
 std::unordered_map<std::string, int32_t> geneid;
 std::vector<std::string> idgene;
 const float inf = std::numeric_limits<float>::max();
+std::atomic_flag spinLockChains = ATOMIC_FLAG_INIT;
 
 struct Node
 {
