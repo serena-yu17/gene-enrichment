@@ -1,16 +1,10 @@
 #pragma once
 
-#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <algorithm>
 #include <atomic>
-#include <atomic>
-#include <cmath>
-#include <stdint.h>
 #include <limits>
-#include <memory>
 
 #include <boost/system/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -20,17 +14,13 @@
 #include <boost/random.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
-#include "ctpl_stl.h"
-
 typedef boost::property<boost::edge_weight_t, float> WeightProperty;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, boost::no_property, WeightProperty, boost::listS> WGraph;
 typedef boost::graph_traits<WGraph>::vertex_descriptor Vertex;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, boost::no_property, boost::no_property, boost::listS> UGraph;
 
-std::unordered_map<std::string, int32_t> geneid;
-std::vector<std::string> idgene;
-const float inf = std::numeric_limits<float>::max();
-std::atomic_flag spinLockChains = ATOMIC_FLAG_INIT;
+const float inf = (std::numeric_limits<float>::max)();
+bool running[10064]{ 0 };
 
 struct Node
 {
