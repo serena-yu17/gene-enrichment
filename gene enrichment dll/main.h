@@ -5,13 +5,13 @@
 #include <vector>
 #include <atomic>
 #include <limits>
+#include <random>
 
 #include <boost/system/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/fruchterman_reingold.hpp>
 #include <boost/graph/random_layout.hpp>
 #include <boost/graph/topology.hpp>
-#include <boost/random.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
 typedef boost::property<boost::edge_weight_t, float> WeightProperty;
@@ -19,7 +19,7 @@ typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, boost
 typedef boost::graph_traits<WGraph>::vertex_descriptor Vertex;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, boost::no_property, boost::no_property, boost::listS> UGraph;
 
-const float inf = (std::numeric_limits<float>::max)();
+constexpr float inf = (std::numeric_limits<float>::max)();
 bool running[10064]{ 0 };
 
 struct Node
