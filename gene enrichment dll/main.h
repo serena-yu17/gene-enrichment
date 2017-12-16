@@ -23,18 +23,6 @@ typedef std::unordered_set<std::pair<int32_t, int32_t>, boost::hash<std::pair<in
 constexpr float inf = (std::numeric_limits<float>::max)();
 bool running[10064]{ 0 };
 
-namespace std
-{
-	template<>
-	struct hash<pair<int32_t, int32_t>>
-	{
-		size_t operator()(pair<int32_t, int32_t> const& pair) const
-		{
-			return (pair.first << 16) | pair.second;				   //
-		}
-	};
-}
-
 inline float distance(float x1, float x2, float y1, float y2)
 {
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
