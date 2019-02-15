@@ -237,13 +237,11 @@ DLLEXP uint32_t enrichGenes(int32_t** vertex, float** coordinates, int32_t* vcou
 
 		*vcount = (int32_t)vertexVec.size();
 		*vertex = new int32_t[*vcount];
-		*coordinates = new float[coordVec.size()];
+		std::copy(vertexVec.begin(), vertexVec.end(), *vertex);
 
-		memcpy(*vertex, &vertexVec[0], *vcount);
-		for (size_t i = 0; i < vertexVec.size(); i++)
-			(*vertex)[i] = vertexVec[i];
-		for (size_t i = 0; i < coordVec.size(); i++)
-			(*coordinates)[i] = coordVec[i];
+		*coordinates = new float[coordVec.size()];
+		std::copy(coordVec.begin(), coordVec.end(), *coordinates);
+
 		*ecount = (int32_t)chains.size();
 		*edge = new int32_t[(*ecount) * 2];
 		int i = 0;

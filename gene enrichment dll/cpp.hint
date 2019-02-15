@@ -4,3 +4,4 @@
 #define DLLEXP extern "C" __declspec(dllexport)
 #define DLLEXP extern "C" __attribute__((visibility("default")))
 #define DLLEXP
+#define BGL_FORALL_VERTICES(VNAME, GNAME, GraphType) for (std::pair<boost::graph_traits<GraphType>::vertex_iterator, boost::graph_traits<GraphType>::vertex_iterator> BGL_RANGE(__LINE__) = vertices(GNAME); BGL_FIRST(__LINE__) != BGL_LAST(__LINE__); BGL_FIRST(__LINE__) = BGL_LAST(__LINE__)) for (boost::graph_traits<GraphType>::vertex_descriptor VNAME; BGL_FIRST(__LINE__) != BGL_LAST(__LINE__) ? (VNAME = *BGL_FIRST(__LINE__), true):false; ++BGL_FIRST(__LINE__))
