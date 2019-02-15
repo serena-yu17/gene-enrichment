@@ -28,6 +28,24 @@ inline float distance(float x1, float x2, float y1, float y2)
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
+inline float repulsive(UGraph::vertex_descriptor& descr1, UGraph::vertex_descriptor& descr2, float k, float d, UGraph const& graph)
+{
+	if (d < (k / 3.5))
+		return inf;
+	else
+		return k * k / d;
+}
+
+inline float attractive(UGraph::edge_descriptor& descr, float k, float d, UGraph const& graph)
+{
+	if (d < (k / 3.5))
+		return 0;
+	else
+		return d * d / k;
+}
+
+
+
 /////
 /////
 ////
