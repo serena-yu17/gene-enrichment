@@ -181,7 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="gene enrichment dll.cpp" />
+    <ClCompile Include="gene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="gene enrichment dll.rc" />
