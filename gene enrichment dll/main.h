@@ -51,8 +51,6 @@ public:
 	std::unordered_map<int32_t, Vertex> idvertex;
 	std::unordered_map<Vertex, int32_t> vertexid;
 
-	GraphData() {}
-
 	GraphData(WGraph&& graph,
 		std::unordered_map<int32_t, Vertex>&& idvertex,
 		std::unordered_map<Vertex, int32_t>&& vertexid)
