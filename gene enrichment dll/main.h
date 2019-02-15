@@ -1,4 +1,4 @@
-//clang gene.cpp - fPIC - shared - std = c++17 - O3 - o gene.dll
+//clang gene.cpp -fPIC -shared -std=c++17 -O3 -o gene.dll
 #pragma once
 
 #if defined(_MSC_VER)
