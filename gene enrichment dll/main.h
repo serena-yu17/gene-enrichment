@@ -41,9 +41,8 @@ using PairSet = std::unordered_set<std::pair<int32_t, int32_t>, boost::hash<std:
 
 constexpr float infinityFloat = (std::numeric_limits<float>::max)();
 
-std::unordered_map<uint32_t, bool> running;
+std::unordered_map<int32_t, bool> running;
 std::shared_mutex runningMutex;
-std::atomic<uint32_t> currentTid;
 
 class GraphData {
 public:

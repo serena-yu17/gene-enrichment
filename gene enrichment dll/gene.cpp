@@ -7,7 +7,7 @@ using namespace std;
 
 unique_ptr<GraphData> currentGraph;
 
-bool getRunningStatus(uint32_t tid)
+bool getRunningStatus(int32_t tid)
 {
 	std::shared_lock<std::shared_mutex> lock(runningMutex);
 	auto found = running.find(tid);
@@ -146,17 +146,17 @@ DLLEXP void buildGraph(int32_t const data[], int32_t nData)
 }
 
 //Build a graph based on coordinates. vertex, coordinates, vcount, edge, ecount are output values passed by reference. 
-DLLEXP uint32_t enrichGenes(int32_t** vertex, float** coordinates, int32_t* vcount,
-	int32_t** edge, int32_t* ecount, uint32_t gid, int32_t const genelist[], int32_t nQuery)
+DLLEXP void enrichGenes(int32_t tid, int32_t** vertex, float** coordinates, int32_t* vcount,
+	int32_t** edge, int32_t* ecount, int32_t const genelist[], int32_t nQuery)
 {
 	if (!currentGraph)
-		return 0;
+		return;
 
-	uint32_t tid = ++currentTid;
+	if (getRunningStatus(tid))
+		return;
+	
 	{
 		std::unique_lock<std::shared_mutex> runningLock(runningMutex);
-		if (tid == 0)
-			tid = ++currentTid;
 		running[tid] = true;
 	}
 
@@ -169,12 +169,12 @@ DLLEXP uint32_t enrichGenes(int32_t** vertex, float** coordinates, int32_t* vcou
 	for (int32_t i = 0; i < nQuery; i++)
 	{
 		if (!getRunningStatus(tid))
-			return 0;
+			return;
 		dijkstraSearch(tid, &chains, genelist[i], genelist, nQuery, graph, idvertex, vertexid);
 	}
 	unordered_map<int32_t, pair<float, float>> formatedGraph = buildGraph(tid, chains);
 	if (!getRunningStatus(tid))
-		return 0;
+		return;
 
 	auto graphSize = formatedGraph.size();
 	//Convert the output to C ABI
@@ -251,18 +251,19 @@ DLLEXP uint32_t enrichGenes(int32_t** vertex, float** coordinates, int32_t* vcou
 			(*edge)[i++] = item.second;
 		}
 	}
-	return tid;
 }
 
-DLLEXP void freeIntArr(int** arr) {
-	delete[](*arr);
+DLLEXP void freeIntArr(int* arr) 
+{
+	delete[] arr;
 }
 
-DLLEXP void freeFloatArr(float** arr) {
-	delete[](*arr);
+DLLEXP void freeFloatArr(float* arr) 
+{
+	delete[] arr;
 }
 
-DLLEXP void terminateProc(uint32_t tid)
+DLLEXP void terminateProc(int32_t tid)
 {
 	std::unique_lock<std::shared_mutex> lock(runningMutex);
 	running[tid] = false;
