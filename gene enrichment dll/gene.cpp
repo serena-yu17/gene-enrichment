@@ -151,9 +151,6 @@ DLLEXP void enrichGenes(int32_t tid, int32_t** vertex, float** coordinates, int3
 {
 	if (!currentGraph)
 		return;
-
-	if (getRunningStatus(tid))
-		return;
 	
 	{
 		std::unique_lock<std::shared_mutex> runningLock(runningMutex);
@@ -251,14 +248,17 @@ DLLEXP void enrichGenes(int32_t tid, int32_t** vertex, float** coordinates, int3
 			(*edge)[i++] = item.second;
 		}
 	}
+
+	std::unique_lock<std::shared_mutex> runningLock(runningMutex);
+	running.erase(tid);
 }
 
-DLLEXP void freeIntArr(int* arr) 
+DLLEXP void freeIntArr(int* arr)
 {
 	delete[] arr;
 }
 
-DLLEXP void freeFloatArr(float* arr) 
+DLLEXP void freeFloatArr(float* arr)
 {
 	delete[] arr;
 }
@@ -266,5 +266,5 @@ DLLEXP void freeFloatArr(float* arr)
 DLLEXP void terminateProc(int32_t tid)
 {
 	std::unique_lock<std::shared_mutex> lock(runningMutex);
-	running[tid] = false;
+	running.erase(tid);
 }
