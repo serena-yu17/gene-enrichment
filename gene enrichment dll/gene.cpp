@@ -45,7 +45,7 @@ void dijkstraSearch(uint32_t tid, PairSet* chains, int32_t node1, int32_t const 
 }
 
 //Use Fruchterman Reingold force directed layout to assign coordinates
-std::unordered_map<int32_t, std::pair<float, float>> buildGraph(uint32_t tid, PairSet& chains)
+std::unordered_map<int32_t, std::pair<float, float>> renderGraph(uint32_t tid, PairSet& chains)
 {
 	UGraph graph;
 	unordered_map<int32_t, size_t> idVertex;
@@ -111,6 +111,8 @@ std::unordered_map<int32_t, std::pair<float, float>> buildGraph(uint32_t tid, Pa
 
 DLLEXP void buildGraph(int32_t const data[], int32_t nData)
 {
+	std::unique_lock<std::shared_mutex> runningLock(runningMutex);
+
 	int32_t maxWeight = 0;
 	unordered_map<int32_t, Vertex> idvertex;
 	unordered_map<Vertex, int32_t> vertexid;
@@ -148,12 +150,11 @@ DLLEXP void buildGraph(int32_t const data[], int32_t nData)
 //Build a graph based on coordinates. vertex, coordinates, vcount, edge, ecount are output values passed by reference. 
 DLLEXP void enrichGenes(int32_t tid, int32_t** vertex, float** coordinates, int32_t* vcount,
 	int32_t** edge, int32_t* ecount, int32_t const genelist[], int32_t nQuery)
-{
-	if (!currentGraph)
-		return;
-	
+{	
 	{
 		std::unique_lock<std::shared_mutex> runningLock(runningMutex);
+		if (!currentGraph)
+			return;
 		running[tid] = true;
 	}
 
@@ -169,7 +170,7 @@ DLLEXP void enrichGenes(int32_t tid, int32_t** vertex, float** coordinates, int3
 			return;
 		dijkstraSearch(tid, &chains, genelist[i], genelist, nQuery, graph, idvertex, vertexid);
 	}
-	unordered_map<int32_t, pair<float, float>> formatedGraph = buildGraph(tid, chains);
+	unordered_map<int32_t, pair<float, float>> formatedGraph = renderGraph(tid, chains);
 	if (!getRunningStatus(tid))
 		return;
 
